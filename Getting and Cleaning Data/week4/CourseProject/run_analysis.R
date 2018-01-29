@@ -72,3 +72,6 @@ names(df)[69] <- "activityDescription"
 ## Use data.table package and create summary
 library(data.table)
 summary <- setDT(df)[, lapply(.SD, mean), by = list(subject, activityNumber, activityDescription)]
+
+
+write.table(summary, "SummaryHumanActivityRecognitionUsingSmartphones.txt", row.names = FALSE)
