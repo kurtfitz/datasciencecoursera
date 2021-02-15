@@ -1,0 +1,133 @@
+---
+title: "Statistical Inference Course Project"
+author: "Kurt Fitz"
+date: "April 1, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+#Overview
+
+The following report is divided into two parts. The first explores the exponential distribution in relation to the Central Limit Theorem, and the second involves some basic inference using the ToothGrowth data in R.
+
+## Part 1 - Simulation Exercise
+
+The Exponential distribution is simulated and compared with the Central Limit Theorem. The simulation is performed 1000 times with a sample size n = 40 
+
+### Sample and theoretical mean
+Following we see the distribution of 1000 exponentials:
+```{r}
+set.seed(33)
+lambda <- 0.2 # The rate parameter
+n <- 40 # sample size
+
+sampleResult <- (rexp(1000, lambda))
+
+
+hist(sampleResult, main = "distribution of 1000 exponentials")
+
+sampleMean <- mean(sampleResult)
+abline(v = sampleMean, col = "blue", lwd = 2)
+
+```
+
+Next, there is the distribution of means of 40 exponentials sampled 1000 times.
+
+```{r}
+lambda <- 0.2 # The rate parameter
+n <- 40 # sample size
+mns = NULL
+
+for (i in 1 : 1000) mns = c(mns, mean(rexp(n, lambda)))
+hist(mns, main = "Simulated Dist of means n=40 1000 times")
+
+simMean <- mean(mns)
+abline(v = simMean, col = "blue", lwd = 2)
+
+```
+
+```{r}
+sampleMean <- mean(sampleResult)
+sampleVariance <- var(mns)
+sampleStdDev <- (1/lambda)/sqrt(n)
+
+simMean <- mean(mns)
+simVariance <- (1/lambda)^2/n
+simStdDev <- (1/lambda)/sqrt(n)
+
+```
+
+The sample mean from above is `r sampleMean` compared to a simulated theoretical mean of `r simMean`. Notice 
+how the distribution is centered around 5. When we compare the distribution of means from our 40 exponentials simulated 1000 times, we can see that the sample mean from above tends to be centered around the same point.
+
+### Sample variance and Standard deviations and theoretical variance of distribution
+The variance of sample distribution is `r sampleVariance`, while the variance of the means of the simulated samples is `r simVariance`. The sample standard deviation is `r sampleStdDev` and the theoretical standard deviation is `r simStdDev`.
+
+### Normality of distribution
+The following graph demonstrates that the simulated distribution of the means of 40 exponentials (1000 times) approximates a normal distribution. This is consistent with the Central Limit Theorem in that the distribution of the averages of samples are normally distributed.
+
+```{r}
+hist(mns, prob=TRUE, col="green", main="", breaks=10)
+lines(density(mns), lwd=3, col="blue")
+
+```
+
+## Part 2 Basic Inferential Data Analysis of ToothGrowth data in R datasets package.
+The following basic inferential analysis will compare tooth growth by dose and supplement using confidence intervals.
+
+Below is a basic summary of the tooth growth data:
+```{r}
+library(datasets)
+data("ToothGrowth")
+
+head(ToothGrowth)
+dim(ToothGrowth)
+str(ToothGrowth)
+summary(ToothGrowth)
+```
+
+## Tooth Growth by Supplement
+```{r}
+library(ggplot2)
+
+qplot(supp, len, data=ToothGrowth, facets=~dose, main="Tooth growth by supplement type and dosage (mg)", xlab="Supplement", ylab="Tooth length") + geom_boxplot(aes(fill = supp))
+
+t.test(len ~ supp, paired = FALSE, var.equal = FALSE, data = ToothGrowth)
+
+```
+
+We can see from the Student's t-test that the 95% confidence interval contains 0; therefore, we cannot reject the null hypotheses that there is no effect between the two supplements.
+
+## Tooth Growth by Dose
+Next, we can examine the relationship between tooth growth and dosage.
+```{r}
+
+## Subset to dosage 0.5 - 1.0
+doseRange1 <- subset(ToothGrowth, dose %in% c(0.5, 1.0))
+
+## Subset to dosage 0.5 - 2.0
+doseRange2 <- subset(ToothGrowth, dose %in% c(0.5, 2.0))
+
+## Subset to dosage 1.0 - 2.0
+doseRange3 <- subset(ToothGrowth, dose %in% c(1.0, 2.0))
+
+t.test(len ~ dose, paired = FALSE, var.equal = FALSE, data = doseRange1)
+
+```
+
+```{r}
+t.test(len ~ dose, paired = FALSE, var.equal = FALSE, data = doseRange2)
+```
+
+```{r}
+t.test(len ~ dose, paired = FALSE, var.equal = FALSE, data = doseRange3)
+```
+
+## Conclusions
+From the preceeding t-tests performed on the three dose ranges, we can conclude that there is a relationship between the increase and dosage and increase in growth. The p-value for each of the three ranges was below 0 and the 95% confidence intervals do not contain 0.

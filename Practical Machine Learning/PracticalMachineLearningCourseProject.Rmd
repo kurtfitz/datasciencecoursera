@@ -1,0 +1,122 @@
+---
+title: "Practical Machine Learning Course Project"
+author: "Kurt Fitz"
+date: "August 24, 2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## This document is the final project in the Coursera Practical Machine Learning course.
+### Executive Summary
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. The goal of this project is to use data collected from accelerometers on the belt, forearm, arm, and dumbell of 6 participants to classify whether barbell lifts were done correctly or not.
+
+### Data Loading and Cleaning
+Load the data and remove variable with near zero variance, mostly NA values, and columns not related to prediction data.
+```{r}
+#Load the dependencies
+library(caret)
+library(e1071)
+library(rpart)
+
+#Read the data into memory
+trainUrl<- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+testUrl<- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+trainingData <- read.csv(url(trainUrl))
+testData <- read.csv(url(testUrl))
+
+dim(trainingData)
+dim(testData)
+
+# remove any variables with near zero variance
+nzv <- nearZeroVar(trainingData)
+
+trainingSet <- trainingData[, -nzv]
+testingSet <- testData[, -nzv]
+
+dim(trainingSet)
+dim(testingSet)
+
+# remove variables that are mostly NA
+naCol <- sapply(trainingSet, function(x) mean(is.na(x))) > 0.95
+
+trainingSet <- trainingSet[,naCol==FALSE]
+testingSet  <- testingSet[,naCol==FALSE]
+
+dim(trainingSet)
+dim(testingSet)
+
+# remove first seven variables, as they have no predictive value.
+trainingSet <- trainingSet[, (8:59)]
+testingSet  <- testingSet[, (8:59)]
+
+dim(trainingSet)
+dim(testingSet)
+
+#convert classe column to factor variable for confusionMatrix compatability.
+trainingSet$classe <- as.factor(trainingSet$classe)
+testingSet$classe <- as.factor(testingSet$classe)
+
+#partition data set
+inTrain <- createDataPartition(trainingSet$classe, p=0.6, list=FALSE)
+
+training <- trainingSet[inTrain,]
+testing <- trainingSet[-inTrain,]
+```
+
+### Modeling
+
+#### Gradient Boosting Model
+```{r}
+gbm_fit <- train(classe ~ ., data=training, method="gbm", verbose=FALSE)
+
+gbm_modfit$finalModel
+
+```
+Prediction using the GBM model
+```{r}
+gbm_predict <- predict(gmb_modfit, testing)
+
+gbm_predict_conf <- confusionMatrix(gbm_predict, testing$classe)
+
+gbm_predict_conf
+
+```
+Resulting plot
+```{r}
+plot(gbm_predict_conf$table, col=gbm_predict_conf$byClass, main="Grad Boosting")
+
+
+```
+
+
+
+#### Random Forest Model
+
+
+#### Decision Tree Model
+```{r}
+#set.seed(3344)
+dt_fit <- train(classe ~., data=training, method="rpart")
+
+```
+
+Prediction using the trained decision tree. 
+
+```{r}
+dt_predict <- predict(dt_fit, testing)
+
+confusionMatrix(testing$classe, dt_predict)
+
+
+```
+
+
+### Conclusion
+
+### Applying Model to Test Data

@@ -1,0 +1,82 @@
+---
+title: "Regression Models Course Project"
+author: "Kurt Fitz"
+date: "February 16, 2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## An Analysis of MPG comparing Automatic and Manual Transmissions.
+### Executive Summary
+Using the 'cars' data set, the following provides an analysis of MPG while taking into account Manual and Automatic vehicle transmission. The goal is to answer the question of whether automatic or manual tranmissions get a better MPG rating. The results of the analyses strongly suggest that manual transmission result in a higher MPG rating then automatic transmission.
+
+### Exploratory Analyses
+The appendix contains plots for the exploratory analyses. The first plot is the pairs plot for the dataset. The second plot is a boxplot showing the relationship between mpg and transmission type. From the boxplot, we can cleary see that tranmission type has an impact on mpg. It appears that automatic transmissions have a lower MPG rating the manual transmission.
+
+```{r}
+#Load the dependencies
+library(ggplot2)
+data(mtcars)
+head(mtcars)
+summary(mtcars)
+
+data <- mtcars
+data$am <- factor(data$am, labels=c("Automatic","Manual"))
+```
+
+
+### Model Analysis and Diagnostics
+From our exploratory analysis, we can see that manual tranmissions are related to an increase in MPG. Therefore, our hypotheses is that on average, manual transmissions have a better MPG rating then automatic. We can perform a T-test to test this hypotheses, and we see that the difference in means is statistically significant.
+```{r}
+t.test(mpg ~ am, data=data)
+
+```
+
+Next we will compare two linear models for the their ability to explain the variance in MPG. Our first model will use only transmission type as the predictor, and our second will use "hp", "disp", and "cyl", in addition to tranmission type.
+```{r}
+fit <- lm(mpg ~ am, data = mtcars)
+summary(fit)
+
+fit2 <-lm(mpg ~ am + hp + disp + cyl, data=mtcars)
+summary(fit2)
+
+```
+
+From the summary output, we see that our first model only explains about 36% of the variation observed, while the second model explains about 80% of the variance we see. Further, we compare the two models using the anova function.
+
+```{r}
+anova(fit, fit2)
+```
+The resulting p-value of 3.177e-07 shows us that our second model is significantly better at explaining variability.
+
+```{r cars}
+summary(cars)
+```
+
+
+### Appendix
+
+#### Plot 1 - Pairs plot for the data set.
+```{r}
+pairs(mpg ~ ., data=mtcars)
+
+```
+
+#### Plot 2 - Boxplot of MPG for Transmission.
+```{r}
+data <- data
+ggplot(data, aes(x=am, y=mpg, ylab="MPG", xlab="Transmission Type")) + geom_boxplot(fill='#A4A4A4', color='black') + geom_boxplot()
+
+```
+
+#### Plot 3 - Residuals Plot
+```{r}
+fit <- lm(am ~ mpg, data=mtcars)
+par(mfrow = c(2,2))
+plot(fit)
+```
