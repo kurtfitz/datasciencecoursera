@@ -1,0 +1,43 @@
+---
+title: "Plotly Examples"
+author: "Kurt Fitz"
+date: "29/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(plotly)
+```
+
+## R Markdown
+
+```{r cars}
+
+plot_ly(mtcars, x=mtcars$wt, y=mtcars$mpg, mode="markers")
+
+## Scatter plot
+plot_ly(mtcars, x=mtcars$wt, y=mtcars$mpg, mode="markers", color=as.factor(mtcars$cyl))
+
+
+## Showing contin\ous colors
+plot_ly(mtcars, x=mtcars$wt, y=mtcars$mpg, mode="markers", color=mtcars$disp)
+
+plot_ly(mtcars, x=mtcars$wt, y=mtcars$mpg, mode="markers", color=as.factor(mtcars$cyl), size=mtcars$hp)
+
+
+```
+
+## 3D Scatterplot
+
+```{r}
+set.seed(2016-07-21)
+temp <- rnorm(100, mean=30, sd=5)
+pressure <- rnorm(100)
+dtime <- 1:100
+plot_ly(x=temp, y=pressure, z=dtime,
+        type="scatter3d", mode="markers", color=temp)
+
+
+```

@@ -1,0 +1,33 @@
+---
+title: "Shiny Plot"
+author: "Kurt Fitz"
+date: "27/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+library(shiny)
+
+shinyUI(fluidPage(
+  titlePanel("Visualize Many Models"),
+    sidebarLayout(
+         sidebarPanel(
+             h3("Slope"),
+             textOutput("slopeOut"),
+             h3("Intercept"),
+             textOutput("intOut")
+     ),
+    mainPanel(             
+      plotOutput("plot1", 
+                 brush = brushOpts(
+                 id = "brush1"
+             ))
+         )
+     )
+ ))
+
+```

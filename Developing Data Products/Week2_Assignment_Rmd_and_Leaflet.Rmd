@@ -1,0 +1,32 @@
+---
+title: "Developing Data Products - R Markdown and Leaflet"
+author: "Kurt Fitz"
+date: "14/02/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(leaflet)
+
+my_map <- leaflet() %>% addTiles()
+
+```
+
+```{r}
+library(leaflet)
+
+my_map <- my_map %>% addMarkers(lat=48.1351, lng=11.5820, popup="Munich, Germany")
+my_map
+
+```
+
+### Review Criteria
+The rubric contains the following two questions:
+
+1. Does the web page feature a date and is this date less than two months before the date that you're grading this assignment?
+2. Does the web page feature an interactive map that appears to have been created with Leaflet?
+
