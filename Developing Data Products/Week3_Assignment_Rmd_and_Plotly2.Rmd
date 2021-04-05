@@ -1,0 +1,41 @@
+---
+title: "Developing Data Products - Week 3 Project"
+author: "Kurt Fitz"
+date: "15/02/2021"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+```{r ECHO=FALSE, warning=FALSE, message=FALSE}
+library(plotly)
+library(WDI)
+
+```
+
+## 1. GDP Data for Canada, Mexico, and U.S.A
+
+```{r ECHO=FALSE, warning=FALSE, message=FALSE}
+dat = WDI(indicator='NY.GDP.PCAP.KD', country=c('MX','CA','US'), start=1960, end=2012)
+
+plot_ly(dat, x=dat$country, y=dat$NY.GDP.PCAP.KD, mode="markers")
+
+```
+
+## 2. GDP Data for Canada, Mexico, and U.S.A
+```{r ECHO=FALSE, warning=FALSE, message=FALSE}
+
+plot_ly(dat, x=dat$year, y=dat$NY.GDP.PCAP.KD, mode="markers", color=as.factor(dat$country))
+
+```
+
+## Final Slide
+
+Review Criteria
+The rubric contains the following two questions:
+
+1. Does the web page feature a date and is this date less than two months before the date that you're grading this assignment?
+2. Is the web page a presentation and does it feature an interactive plot that appears to have been created with Plotly?
+
+
