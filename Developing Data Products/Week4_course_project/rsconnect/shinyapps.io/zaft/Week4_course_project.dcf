@@ -1,0 +1,13 @@
+name: Week4_course_project
+title: Week4_course_project
+username:
+account: zaft
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3909776
+bundleId: 4431592
+url: https://zaft.shinyapps.io/Week4_course_project/
+when: 1617589335.17872
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: mtcars_presentation-rpub.md|mtcars_presentation-rpub.Rpres|README.md|mtcars_presentation-rpub-figure/unnamed-chunk-2-1.png|mtcars_presentation-rpub-figure/unnamed-chunk-3-1.png

@@ -1,0 +1,34 @@
+Developing Data Products - Week 4 Course Project.
+========================================================
+author: Kurt Fitz
+date: April 4, 2021
+autosize: true
+
+Introduction
+========================================================
+
+This Shiny App will display the histogram plot for any of the variables found in the mtcars data set. 
+
+
+Documentation
+========================================================
+Here is a summary of the "mtcars" dataset found in the R datasets As you can see, 32 observations on 11 numeric variables.
+```{r echo=FALSE}
+data(mtcars)
+str(mtcars[,])
+```{r}
+summary(cars)
+```
+
+Summary plot of the mtcars data with each of the relevant variables plotted against each other
+========================================================
+
+```{r, echo=FALSE}
+plot(mtcars)
+```
+
+Links
+========================================================
+- shiny app: https://zaft.shinyapps.io/Week4_course_project/
+
+- source code: https://github.com/Zaft/datasciencecoursera/tree/master/Developing%20Data%20Products/Week4_course_project
